@@ -1,0 +1,16 @@
+.thinks {
+  position: absolute;
+  top: 12rem;
+}
+
+.think-item {
+  margin: 0 0.5rem;
+  height: 2.5rem;
+  text-decoration: none;
+  color: hsl(0, 0%, 45%);
+}
+
+.glow {
+  color: hsl(0, 0%, 100%);
+  text-shadow: 0 0 1rem hsl(0, 0%, 100%);
+}
