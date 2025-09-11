@@ -17,6 +17,7 @@
   background: transparent;
   will-change: auto;
   transform: translateZ(0); /* Force hardware acceleration */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .search-suggestion {

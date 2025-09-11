@@ -1,29 +1,61 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SearchForm, PixelatedWave } from "../components";
+import { SearchForm } from "../components";
 import { useKeyboardNavigation, useUrlFetcher } from "../hooks";
 import useAutocomplete from "../hooks/useAutocomplete";
-import useThoughts from "../hooks/useThoughts";
 import { handleDefaultSearch, processQuery } from "../utils/search";
+import { storeLastSearchQuery } from "../utils/localStorage";
 
 export default function Home() {
   const [q, setQ] = useState("");
-  const [selectedThought, setSelectedThought] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useUrlFetcher();
-  const thoughts = useThoughts(q);
-  const { suggestion, saveToHistory } = useAutocomplete(q);
+  const {
+    suggestions,
+    selectedIndex,
+    setSelectedIndex,
+    selectNext,
+    selectPrevious,
+    getSelectedSuggestion,
+    saveToHistory,
+  } = useAutocomplete(q);
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+
+    if (selectedIndex > 0 && suggestions.length > 0) {
+      const selectedSuggestion = suggestions[selectedIndex - 1];
+      if (selectedSuggestion) {
+        // Store the query in localStorage before navigation
+        storeLastSearchQuery(selectedSuggestion.text);
+        const url = handleDefaultSearch(selectedSuggestion.text, urls);
+        window.open(url, "_self");
+        setSelectedIndex(0);
+        return;
+      }
+    }
+
+    if (!q.trim()) return;
+    const query = q.trim().toLowerCase();
+    // Store the query in localStorage before navigation
+    storeLastSearchQuery(query);
+    saveToHistory(query);
+    const url = processQuery(query, urls);
+    window.open(url, "_self");
+    setQ("");
+  };
 
   // Use the keyboard navigation hook
   useKeyboardNavigation(
-    selectedThought,
-    setSelectedThought,
-    thoughts,
+    selectedIndex,
+    setSelectedIndex,
+    suggestions,
     inputRef,
     q,
-    suggestion,
-    setQ
+    getSelectedSuggestion,
+    setQ,
+    handleSubmit
   );
 
   // Focus input on initial load
@@ -31,54 +63,33 @@ export default function Home() {
     inputRef.current?.focus();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (selectedThought > 0) {
-      const query = thoughts[selectedThought - 1];
-      const url = handleDefaultSearch(query, urls);
+  const handleSuggestionClick = (index: number) => {
+    const selectedSuggestion = suggestions[index];
+    if (selectedSuggestion) {
+      // Store the query in localStorage before navigation
+      storeLastSearchQuery(selectedSuggestion.text);
+      const url = handleDefaultSearch(selectedSuggestion.text, urls);
       window.open(url, "_self");
-      setSelectedThought(0);
-      return;
+      setSelectedIndex(0);
     }
-
-    if (!q.trim()) return;
-    const query = q.trim().toLowerCase();
-    saveToHistory(query);
-    const url = processQuery(query, urls);
-    window.open(url, "_self");
-    setQ("");
   };
 
-  const handleThoughtClick = (index: number) => {
-    const query = thoughts[index];
-    const url = handleDefaultSearch(query, urls);
-    window.open(url, "_self");
-    setSelectedThought(0);
-  };
-
-  const placeholder = "Search for something...";
+  const placeholder = "";
 
   return (
     <>
-      <PixelatedWave
-        gridSize={24}
-        dotSize={3}
-        waveAmplitude={25}
-        waveSpeed={0.001}
-        opacity={0.4}
-        color="#ffffff"
-      />
       <SearchForm
-        thoughts={thoughts}
         onSubmit={handleSubmit}
         inputRef={inputRef}
-        suggestion={suggestion}
+        suggestions={suggestions}
+        selectedIndex={selectedIndex}
+        selectNext={selectNext}
+        selectPrevious={selectPrevious}
+        getSelectedSuggestion={getSelectedSuggestion}
         placeholder={placeholder}
         query={q}
         onQueryInput={setQ}
-        selectedThought={selectedThought}
-        onThoughtClick={handleThoughtClick}
+        onSuggestionClick={handleSuggestionClick}
       />
     </>
   );

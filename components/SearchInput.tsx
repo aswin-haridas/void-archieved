@@ -1,7 +1,21 @@
 import "../hooks/styles/InputStyles.css";
 import { useEffect, useRef, useState } from "react";
 
-const SearchInput = ({ inputRef, placeholder, value, onInput, suggestion }) => {
+interface SearchInputProps {
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  placeholder: string;
+  value: string;
+  onInput: (value: string) => void;
+  suggestion: string;
+}
+
+const SearchInput = ({
+  inputRef,
+  placeholder,
+  value,
+  onInput,
+  suggestion,
+}: SearchInputProps) => {
   const [_cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef(null);
 
@@ -16,8 +30,8 @@ const SearchInput = ({ inputRef, placeholder, value, onInput, suggestion }) => {
     return () => clearTimeout(timeoutId);
   }, [value, inputRef]);
 
-  const handleInput = (e) => {
-    setCursorPosition(e.currentTarget.selectionStart);
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    setCursorPosition(e.currentTarget.selectionStart || 0);
     onInput(e.currentTarget.value);
   };
 
@@ -34,8 +48,12 @@ const SearchInput = ({ inputRef, placeholder, value, onInput, suggestion }) => {
           className="raleway search alive"
           value={value}
           onInput={handleInput}
-          onKeyUp={(e) => setCursorPosition(e.currentTarget.selectionStart)}
-          onMouseUp={(e) => setCursorPosition(e.currentTarget.selectionStart)}
+          onKeyUp={(e) =>
+            setCursorPosition(e.currentTarget.selectionStart || 0)
+          }
+          onMouseUp={(e) =>
+            setCursorPosition(e.currentTarget.selectionStart || 0)
+          }
           onKeyDown={(e) =>
             e.key === "Tab" && console.log("Tab pressed in input")
           }

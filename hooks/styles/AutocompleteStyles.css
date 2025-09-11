@@ -1,0 +1,41 @@
+.autocomplete-list {
+  position: absolute;
+  top: 12rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 100%;
+  width: 100%;
+}
+
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  height: 2.5rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: hsl(0, 0%, 45%);
+  background: transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.autocomplete-item:hover {
+  color: hsl(0, 0%, 70%);
+  border-color: hsl(0, 0%, 30%);
+}
+
+.glow {
+  color: hsl(0, 0%, 100%);
+  text-shadow: 0 0 1rem hsl(0, 0%, 100%);
+  border-color: hsl(0, 0%, 60%);
+}
+
+.suggestion-text {
+  white-space: nowrap;
+}

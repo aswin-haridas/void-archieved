@@ -1,11 +1,11 @@
 // Serverless history management using localStorage
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from "react";
 
-const HISTORY_KEY = 'void-search-history';
+const HISTORY_KEY = "void-search-history";
 const MAX_HISTORY_ITEMS = 50;
 
 export default function useHistory() {
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState<string[]>([]);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -15,35 +15,43 @@ export default function useHistory() {
         setHistory(JSON.parse(savedHistory));
       }
     } catch (error) {
-      console.error('Failed to load history from localStorage:', error);
+      console.error("Failed to load history from localStorage:", error);
     }
   }, []);
 
-  const saveToHistory = (query) => {
+  const saveToHistory = (query: string) => {
     if (!query || !query.trim()) return;
 
     const trimmedQuery = query.trim().toLowerCase();
 
     setHistory((prevHistory) => {
       // Remove if already exists to avoid duplicates
-      const filteredHistory = prevHistory.filter((item) => item !== trimmedQuery);
+      const filteredHistory = prevHistory.filter(
+        (item) => item !== trimmedQuery
+      );
 
       // Add to beginning and limit size
-      const newHistory = [trimmedQuery, ...filteredHistory].slice(0, MAX_HISTORY_ITEMS);
+      const newHistory = [trimmedQuery, ...filteredHistory].slice(
+        0,
+        MAX_HISTORY_ITEMS
+      );
 
       // Save to localStorage
       try {
         localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
       } catch (error) {
-        console.error('Failed to save history to localStorage:', error);
+        console.error("Failed to save history to localStorage:", error);
       }
 
       return newHistory;
     });
   };
 
-  return {
-    data: { history },
-    saveToHistory,
-  };
+  return useMemo(
+    () => ({
+      data: { history },
+      saveToHistory,
+    }),
+    [history]
+  );
 }

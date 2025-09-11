@@ -1,31 +1,47 @@
-import SearchInput from './SearchInput';
-import ThoughtList from './ThoughtList';
+import SearchInput from "./SearchInput";
+import AutocompleteList from "./AutocompleteList";
+import { AutocompleteSuggestion } from "../hooks/useAutocomplete";
+
+interface SearchFormProps {
+  onSubmit: (e: React.FormEvent) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  placeholder: string;
+  suggestions: AutocompleteSuggestion[];
+  selectedIndex: number;
+  selectNext: () => void;
+  selectPrevious: () => void;
+  getSelectedSuggestion: () => AutocompleteSuggestion | null;
+  query: string;
+  onQueryInput: (value: string) => void;
+  onSuggestionClick: (index: number) => void;
+}
 
 const SearchForm = ({
   onSubmit,
   inputRef,
   placeholder,
-  suggestion,
+  suggestions,
+  selectedIndex,
+  selectNext,
+  selectPrevious,
+  getSelectedSuggestion,
   query,
-  thoughts,
   onQueryInput,
-  selectedThought,
-  onThoughtClick,
-}) => {
+  onSuggestionClick,
+}: SearchFormProps) => {
   return (
     <form onSubmit={onSubmit} className="container">
       <SearchInput
         inputRef={inputRef}
-        suggestion={suggestion}
+        suggestion={getSelectedSuggestion()?.text || ""}
         placeholder={placeholder}
         value={query}
         onInput={onQueryInput}
       />
-      <ThoughtList
-        thoughts={thoughts}
-        selectedThought={selectedThought}
-        onThoughtClick={onThoughtClick}
-        query={query}
+      <AutocompleteList
+        suggestions={suggestions}
+        selectedIndex={selectedIndex}
+        onSuggestionClick={onSuggestionClick}
       />
     </form>
   );
