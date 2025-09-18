@@ -1,5 +1,5 @@
-import "../hooks/styles/AutocompleteStyles.css";
-import { AutocompleteSuggestion } from "../hooks/useAutocomplete";
+import '../hooks/styles/AutocompleteStyles.css';
+import type { AutocompleteSuggestion } from '../hooks/useAutocomplete';
 
 interface AutocompleteListProps {
   suggestions: AutocompleteSuggestion[];
@@ -20,9 +20,7 @@ const AutocompleteList = ({
         <button
           key={`${suggestion.text}-${index}`}
           type="button"
-          className={`autocomplete-item ${
-            selectedIndex === index ? "glow" : ""
-          }`}
+          className={`autocomplete-item ${selectedIndex === index ? 'glow' : ''}`}
           onClick={() => onSuggestionClick(index)}
         >
           <span className="suggestion-text">{suggestion.text}</span>

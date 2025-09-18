@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { SearchForm } from "../components";
-import { useKeyboardNavigation, useUrlFetcher } from "../hooks";
-import useAutocomplete from "../hooks/useAutocomplete";
-import { handleDefaultSearch, processQuery } from "../utils/search";
-import { storeLastSearchQuery } from "../utils/localStorage";
+import { useEffect, useRef, useState } from 'react';
+import { SearchForm } from '../components';
+import { useKeyboardNavigation, useUrlFetcher } from '../hooks';
+import useAutocomplete from '../hooks/useAutocomplete';
+import { storeLastSearchQuery } from '../utils/localStorage';
+import { handleDefaultSearch, processQuery } from '../utils/search';
 
 export default function Home() {
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useUrlFetcher();
   const {
@@ -21,7 +21,7 @@ export default function Home() {
     saveToHistory,
   } = useAutocomplete(q);
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
 
     if (selectedIndex > 0 && suggestions.length > 0) {
@@ -29,8 +29,9 @@ export default function Home() {
       if (selectedSuggestion) {
         // Store the query in localStorage before navigation
         storeLastSearchQuery(selectedSuggestion.text);
+        await saveToHistory(selectedSuggestion.text);
         const url = handleDefaultSearch(selectedSuggestion.text, urls);
-        window.open(url, "_self");
+        window.open(url, '_self');
         setSelectedIndex(0);
         return;
       }
@@ -40,10 +41,10 @@ export default function Home() {
     const query = q.trim().toLowerCase();
     // Store the query in localStorage before navigation
     storeLastSearchQuery(query);
-    saveToHistory(query);
+    await saveToHistory(query);
     const url = processQuery(query, urls);
-    window.open(url, "_self");
-    setQ("");
+    window.open(url, '_self');
+    setQ('');
   };
 
   // Use the keyboard navigation hook
@@ -63,18 +64,19 @@ export default function Home() {
     inputRef.current?.focus();
   }, []);
 
-  const handleSuggestionClick = (index: number) => {
+  const handleSuggestionClick = async (index: number) => {
     const selectedSuggestion = suggestions[index];
     if (selectedSuggestion) {
       // Store the query in localStorage before navigation
       storeLastSearchQuery(selectedSuggestion.text);
+      await saveToHistory(selectedSuggestion.text);
       const url = handleDefaultSearch(selectedSuggestion.text, urls);
-      window.open(url, "_self");
+      window.open(url, '_self');
       setSelectedIndex(0);
     }
   };
 
-  const placeholder = "";
+  const placeholder = '';
 
   return (
     <>

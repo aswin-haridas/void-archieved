@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { AutocompleteSuggestion } from "./useAutocomplete";
+import { useEffect } from 'react';
+import type { AutocompleteSuggestion } from './useAutocomplete';
 
 export const useKeyboardNavigation = (
   selectedIndex: number,
@@ -14,17 +14,15 @@ export const useKeyboardNavigation = (
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Handle arrow down - select next suggestion
-      if (e.key === "ArrowDown") {
+      if (e.key === 'ArrowDown') {
         e.preventDefault(); // Prevent scroll
         setSelectedIndex((prev) => (prev + 1) % suggestions.length);
       }
 
       // Handle arrow up - select previous suggestion
-      if (e.key === "ArrowUp") {
+      if (e.key === 'ArrowUp') {
         e.preventDefault(); // Prevent scroll
-        setSelectedIndex(
-          (prev) => (prev - 1 + suggestions.length) % suggestions.length
-        );
+        setSelectedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
       }
 
       // Handle Tab key to accept suggestion
@@ -37,15 +35,15 @@ export const useKeyboardNavigation = (
       }
 
       // Handle Enter key - submit form
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         e.preventDefault();
         onSubmit();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [
     selectedIndex,
