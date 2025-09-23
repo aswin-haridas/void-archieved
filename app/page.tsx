@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { SearchForm } from '../components';
+import { ProgressOverlay, SearchForm } from '../components';
 import { useKeyboardNavigation, useUrlFetcher } from '../hooks';
 import useAutocomplete from '../hooks/useAutocomplete';
 import { storeLastSearchQuery } from '../utils/localStorage';
@@ -80,6 +80,7 @@ export default function Home() {
 
   return (
     <>
+      <ProgressOverlay />
       <SearchForm
         onSubmit={handleSubmit}
         inputRef={inputRef}
