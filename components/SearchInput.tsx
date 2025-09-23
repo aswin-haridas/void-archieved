@@ -1,5 +1,5 @@
-import "../hooks/styles/InputStyles.css";
-import { useEffect, useRef, useState } from "react";
+import '../hooks/styles/InputStyles.css';
+import { useEffect, useRef, useState } from 'react';
 
 interface SearchInputProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -9,13 +9,7 @@ interface SearchInputProps {
   suggestion: string;
 }
 
-const SearchInput = ({
-  inputRef,
-  placeholder,
-  value,
-  onInput,
-  suggestion,
-}: SearchInputProps) => {
+const SearchInput = ({ inputRef, placeholder, value, onInput, suggestion }: SearchInputProps) => {
   const [_cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef(null);
 
@@ -36,8 +30,8 @@ const SearchInput = ({
   };
 
   // Determine visible parts of suggestion
-  const prefix = value || "";
-  const suffix = suggestion ? suggestion.slice(prefix.length) : "";
+  const prefix = value || '';
+  const suffix = suggestion ? suggestion.slice(prefix.length) : '';
 
   return (
     <div className="search-container" ref={containerRef}>
@@ -48,15 +42,9 @@ const SearchInput = ({
           className="raleway search alive"
           value={value}
           onInput={handleInput}
-          onKeyUp={(e) =>
-            setCursorPosition(e.currentTarget.selectionStart || 0)
-          }
-          onMouseUp={(e) =>
-            setCursorPosition(e.currentTarget.selectionStart || 0)
-          }
-          onKeyDown={(e) =>
-            e.key === "Tab" && console.log("Tab pressed in input")
-          }
+          onKeyUp={(e) => setCursorPosition(e.currentTarget.selectionStart || 0)}
+          onMouseUp={(e) => setCursorPosition(e.currentTarget.selectionStart || 0)}
+          onKeyDown={(e) => e.key === 'Tab' && console.log('Tab pressed in input')}
           aria-autocomplete="list"
           autoComplete="off"
         />

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import useHistory from "./useHistory";
+import { useEffect, useState } from 'react';
+import useHistory from './useHistory';
 
 export interface AutocompleteSuggestion {
   text: string;
-  type: "text";
+  type: 'text';
 }
 
 export default function useAutocomplete(q: string) {
@@ -22,9 +22,7 @@ export default function useAutocomplete(q: string) {
 
     // Filter history items that start with the query (more relevant for autocomplete)
     const exactMatches =
-      data?.history?.filter((item) =>
-        item.toLowerCase().startsWith(lowerCaseQuery)
-      ) || [];
+      data?.history?.filter((item) => item.toLowerCase().startsWith(lowerCaseQuery)) || [];
 
     // If no exact matches, look for items that include the query
     const partialMatches =
@@ -35,12 +33,9 @@ export default function useAutocomplete(q: string) {
       ) || [];
 
     // Combine and create suggestions
-    const textSuggestions: AutocompleteSuggestion[] = [
-      ...exactMatches,
-      ...partialMatches,
-    ]
+    const textSuggestions: AutocompleteSuggestion[] = [...exactMatches, ...partialMatches]
       .slice(0, 5)
-      .map((text) => ({ text, type: "text" as const }));
+      .map((text) => ({ text, type: 'text' as const }));
 
     // Use only text suggestions from history
     const allSuggestions = textSuggestions.slice(0, 8);
@@ -54,9 +49,7 @@ export default function useAutocomplete(q: string) {
   };
 
   const selectPrevious = () => {
-    setSelectedIndex(
-      (prev) => (prev - 1 + suggestions.length) % suggestions.length
-    );
+    setSelectedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
   };
 
   const getSelectedSuggestion = () => {

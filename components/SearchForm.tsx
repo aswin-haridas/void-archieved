@@ -1,6 +1,6 @@
-import SearchInput from "./SearchInput";
-import AutocompleteList from "./AutocompleteList";
-import { AutocompleteSuggestion } from "../hooks/useAutocomplete";
+import type { AutocompleteSuggestion } from '../hooks/useAutocomplete';
+import AutocompleteList from './AutocompleteList';
+import SearchInput from './SearchInput';
 
 interface SearchFormProps {
   onSubmit: (e: React.FormEvent) => void;
@@ -33,7 +33,7 @@ const SearchForm = ({
     <form onSubmit={onSubmit} className="container">
       <SearchInput
         inputRef={inputRef}
-        suggestion={getSelectedSuggestion()?.text || ""}
+        suggestion={getSelectedSuggestion()?.text || ''}
         placeholder={placeholder}
         value={query}
         onInput={onQueryInput}
