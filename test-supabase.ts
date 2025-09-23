@@ -3,7 +3,7 @@
  * This can be run in environments with network access to validate the integration
  */
 
-import { getSearchHistory, saveSearchQuery, clearSearchHistory } from './utils/supabaseHistory';
+import { clearSearchHistory, getSearchHistory, saveSearchQuery } from './utils/supabaseHistory';
 
 /**
  * Test function to verify Supabase operations
@@ -11,45 +11,44 @@ import { getSearchHistory, saveSearchQuery, clearSearchHistory } from './utils/s
  */
 export async function testSupabaseIntegration() {
   console.log('🧪 Testing Supabase Integration...');
-  
+
   try {
     // Test 1: Clear existing history
     console.log('1. Clearing existing history...');
     await clearSearchHistory();
-    
+
     // Test 2: Add some test queries
     console.log('2. Adding test search queries...');
     const testQueries = ['react', 'javascript', 'typescript', 'next.js', 'supabase'];
-    
+
     for (const query of testQueries) {
       const success = await saveSearchQuery(query);
       console.log(`   - Saved "${query}": ${success ? '✅' : '❌'}`);
     }
-    
+
     // Test 3: Retrieve history
     console.log('3. Retrieving search history...');
     const history = await getSearchHistory();
     console.log('   Retrieved history:', history);
-    
+
     // Test 4: Verify order (should be most recent first)
     if (history.length === testQueries.length) {
-      const isCorrectOrder = history.every((item, index) => 
-        item === testQueries[testQueries.length - 1 - index]
+      const isCorrectOrder = history.every(
+        (item, index) => item === testQueries[testQueries.length - 1 - index]
       );
       console.log(`   Order verification: ${isCorrectOrder ? '✅' : '❌'}`);
     }
-    
+
     // Test 5: Test duplicate handling
     console.log('4. Testing duplicate handling...');
     await saveSearchQuery('react'); // Should move to top, not duplicate
     const updatedHistory = await getSearchHistory();
-    const reactCount = updatedHistory.filter(item => item === 'react').length;
+    const reactCount = updatedHistory.filter((item) => item === 'react').length;
     console.log(`   Duplicate test (should be 1): ${reactCount === 1 ? '✅' : '❌'}`);
     console.log(`   React is at top: ${updatedHistory[0] === 'react' ? '✅' : '❌'}`);
-    
+
     console.log('🎉 Supabase integration test completed!');
     return true;
-    
   } catch (error) {
     console.error('❌ Supabase integration test failed:', error);
     return false;
