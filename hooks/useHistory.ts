@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getSearchHistory, saveSearchQuery } from '../utils/supabaseHistory';
 
-const HISTORY_KEY = 'void-search-history';
+const HISTORY_KEY = 'history';
 const MAX_HISTORY_ITEMS = 50;
 
 export default function useHistory() {
