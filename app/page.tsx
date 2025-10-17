@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { ProgressOverlay, SearchForm } from '../components';
 import { useKeyboardNavigation, useUrlFetcher } from '../hooks';
 import useAutocomplete from '../hooks/useAutocomplete';
-import { storeLastSearchQuery } from '../utils/localStorage';
 import { handleDefaultSearch, processQuery } from '../utils/search';
 
 export default function Home() {
@@ -27,8 +26,6 @@ export default function Home() {
     if (selectedIndex > 0 && suggestions.length > 0) {
       const selectedSuggestion = suggestions[selectedIndex - 1];
       if (selectedSuggestion) {
-        // Store the query in localStorage before navigation
-        storeLastSearchQuery(selectedSuggestion.text);
         await saveToHistory(selectedSuggestion.text);
         const url = handleDefaultSearch(selectedSuggestion.text, urls);
         window.open(url, '_self');
@@ -39,8 +36,6 @@ export default function Home() {
 
     if (!q.trim()) return;
     const query = q.trim().toLowerCase();
-    // Store the query in localStorage before navigation
-    storeLastSearchQuery(query);
     await saveToHistory(query);
     const url = processQuery(query, urls);
     window.open(url, '_self');
@@ -67,8 +62,6 @@ export default function Home() {
   const handleSuggestionClick = async (index: number) => {
     const selectedSuggestion = suggestions[index];
     if (selectedSuggestion) {
-      // Store the query in localStorage before navigation
-      storeLastSearchQuery(selectedSuggestion.text);
       await saveToHistory(selectedSuggestion.text);
       const url = handleDefaultSearch(selectedSuggestion.text, urls);
       window.open(url, '_self');

@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 
-const SEARCH_HISTORY_TABLE = 'history';
+const SEARCH_HISTORY_TABLE = 'search_history';
 const MAX_HISTORY_ITEMS = 50;
 
 export const getSearchHistory = async (): Promise<string[]> => {
