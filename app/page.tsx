@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { ProgressOverlay, SearchForm } from '../components';
-import { useKeyboardNavigation, useUrlFetcher } from '../hooks';
-import useAutocomplete from '../hooks/useAutocomplete';
-import { handleDefaultSearch, processQuery } from '../utils/search';
+import { useEffect, useRef, useState } from "react";
+import { ProgressOverlay, SearchForm } from "../components";
+import { useKeyboardNavigation, useUrlFetcher } from "../hooks";
+import useAutocomplete from "../hooks/useAutocomplete";
+import { handleDefaultSearch, processQuery } from "../utils/search";
 
 export default function Home() {
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useUrlFetcher();
   const {
@@ -17,7 +17,6 @@ export default function Home() {
     selectNext,
     selectPrevious,
     getSelectedSuggestion,
-    saveToHistory,
   } = useAutocomplete(q);
 
   const handleSubmit = async (e?: React.FormEvent) => {
@@ -26,9 +25,8 @@ export default function Home() {
     if (selectedIndex > 0 && suggestions.length > 0) {
       const selectedSuggestion = suggestions[selectedIndex - 1];
       if (selectedSuggestion) {
-        await saveToHistory(selectedSuggestion.text);
         const url = handleDefaultSearch(selectedSuggestion.text, urls);
-        window.open(url, '_self');
+        window.open(url, "_self");
         setSelectedIndex(0);
         return;
       }
@@ -38,13 +36,12 @@ export default function Home() {
     const trimmedQuery = q.trim();
     // Preserve case for direct URLs, convert to lowercase for searches
     const query =
-      trimmedQuery.startsWith('https://') || trimmedQuery.startsWith('http://')
+      trimmedQuery.startsWith("https://") || trimmedQuery.startsWith("http://")
         ? trimmedQuery
         : trimmedQuery.toLowerCase();
-    await saveToHistory(query);
     const url = processQuery(query, urls);
-    window.open(url, '_self');
-    setQ('');
+    window.open(url, "_self");
+    setQ("");
   };
 
   // Use the keyboard navigation hook
@@ -67,14 +64,13 @@ export default function Home() {
   const handleSuggestionClick = async (index: number) => {
     const selectedSuggestion = suggestions[index];
     if (selectedSuggestion) {
-      await saveToHistory(selectedSuggestion.text);
       const url = handleDefaultSearch(selectedSuggestion.text, urls);
-      window.open(url, '_self');
+      window.open(url, "_self");
       setSelectedIndex(0);
     }
   };
 
-  const placeholder = '';
+  const placeholder = "";
 
   return (
     <>

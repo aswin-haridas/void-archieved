@@ -18,10 +18,6 @@ body {
   justify-content: center;
   min-height: 100vh;
   will-change: auto;
-  background-image: url("/bg.jpeg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 ::selection {
   background-color: #ffffff;
