@@ -8,6 +8,10 @@ export const isDirectNavigation = (query: string) => {
   return query.startsWith(SEARCH_PREFIXES.DIRECT);
 };
 
+export const isHttpsUrl = (query: string) => {
+  return query.startsWith('https://') || query.startsWith('http://');
+};
+
 export const isImageSearch = (query: string) => {
   return contains(query, SEARCH_PREFIXES.IMAGES);
 };
@@ -37,7 +41,9 @@ export const handleYoutubeSearch = (query: string) => {
 };
 
 export const processQuery = (query: string, customUrls: Record<string, string> = {}) => {
-  if (isDirectNavigation(query)) {
+  if (isHttpsUrl(query)) {
+    return query;
+  } else if (isDirectNavigation(query)) {
     return handleDirectSiteNavigation(query);
   } else if (isImageSearch(query)) {
     return handleImageSearch(query);
