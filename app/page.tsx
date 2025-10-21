@@ -35,7 +35,12 @@ export default function Home() {
     }
 
     if (!q.trim()) return;
-    const query = q.trim().toLowerCase();
+    const trimmedQuery = q.trim();
+    // Preserve case for direct URLs, convert to lowercase for searches
+    const query =
+      trimmedQuery.startsWith('https://') || trimmedQuery.startsWith('http://')
+        ? trimmedQuery
+        : trimmedQuery.toLowerCase();
     await saveToHistory(query);
     const url = processQuery(query, urls);
     window.open(url, '_self');
