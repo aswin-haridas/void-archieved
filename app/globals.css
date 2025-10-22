@@ -69,6 +69,7 @@ input {
   background-color: transparent;
   appearance: none;
   color: #ffffff;
+  text-align:center
 }
 
 input:focus {
